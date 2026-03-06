@@ -13,6 +13,10 @@ const messages = {
             viewDetails: '查看详情',
             learnMore: '了解更多',
             scroll: '滚动',
+            noContent: '暂无内容',
+            previousBanner: '上一张',
+            nextBanner: '下一张',
+            switchBanner: '切换到第 {n} 张',
             api: {
                 responseMissing: '服务器响应异常',
                 requestFailed: '请求失败',
@@ -838,6 +842,10 @@ const messages = {
             viewDetails: '查看詳情',
             learnMore: '了解更多',
             scroll: '捲動',
+            noContent: '暫無內容',
+            previousBanner: '上一張',
+            nextBanner: '下一張',
+            switchBanner: '切換到第 {n} 張',
             api: {
                 responseMissing: '伺服器回應異常',
                 requestFailed: '請求失敗',
@@ -1663,6 +1671,10 @@ const messages = {
             viewDetails: 'View Details',
             learnMore: 'Learn More',
             scroll: 'Scroll',
+            noContent: 'No Content',
+            previousBanner: 'Previous',
+            nextBanner: 'Next',
+            switchBanner: 'Switch to slide {n}',
             api: {
                 responseMissing: 'Server response is invalid',
                 requestFailed: 'Request failed',

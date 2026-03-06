@@ -31,7 +31,7 @@
                 type="button"
                 class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/20 text-white transition hover:bg-black/35"
                 @click="handlePrevHeroBanner"
-                aria-label="上一张 Banner"
+                :aria-label="t('common.previousBanner')"
               >
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -41,7 +41,7 @@
                 type="button"
                 class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-black/20 text-white transition hover:bg-black/35"
                 @click="handleNextHeroBanner"
-                aria-label="下一张 Banner"
+                :aria-label="t('common.nextBanner')"
               >
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -90,7 +90,7 @@
                 class="h-2.5 rounded-full transition-all"
                 :class="index === currentBannerIndex ? 'w-7 bg-white' : 'w-2.5 bg-white/45 hover:bg-white/70'"
                 @click="selectHeroBanner(index)"
-                :aria-label="`切换到第 ${index + 1} 张 Banner`"
+                :aria-label="t('common.switchBanner', { n: index + 1 })"
               ></button>
             </div>
           </div>

@@ -26,8 +26,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <p class="text-lg font-medium">暂无内容 / No Content</p>
-          <p class="text-sm mt-2 opacity-60">Please configure this page in Admin Panel</p>
+          <p class="text-lg font-medium">{{ t('common.noContent') }}</p>
         </div>
       </div>
     </div>
@@ -36,7 +35,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useAppStore } from '../stores/app'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   type: 'terms' | 'privacy'
@@ -48,11 +50,7 @@ const loading = computed(() => appStore.loading)
 const locale = computed(() => appStore.locale)
 
 const title = computed(() => {
-  if (props.type === 'terms') {
-    return locale.value === 'zh-CN' ? '服务条款' : (locale.value === 'zh-TW' ? '服務條款' : 'Terms of Service')
-  } else {
-    return locale.value === 'zh-CN' ? '隐私政策' : (locale.value === 'zh-TW' ? '隱私政策' : 'Privacy Policy')
-  }
+  return props.type === 'terms' ? t('footer.terms') : t('footer.privacy')
 })
 
 const content = computed(() => {
