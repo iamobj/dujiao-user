@@ -145,6 +145,7 @@ const messages = {
             guestOrders: '游客查单',
             logout: '退出',
             selectLanguage: '选择语言',
+            more: '更多',
         },
         toast: {
             addedToCart: '已加入购物车',
@@ -1010,6 +1011,7 @@ const messages = {
             guestOrders: '遊客查單',
             logout: '退出',
             selectLanguage: '選擇語言',
+            more: '更多',
         },
         toast: {
             addedToCart: '已加入購物車',
@@ -1851,6 +1853,7 @@ const messages = {
             guestOrders: 'Guest Lookup',
             logout: 'Logout',
             selectLanguage: 'Select Language',
+            more: 'More',
         },
         toast: {
             addedToCart: 'Added to cart',
@@ -2527,9 +2530,30 @@ const messages = {
     },
 }
 
+const supportedLocales = ['zh-CN', 'zh-TW', 'en-US']
+
+function detectLocale(): string {
+    const saved = localStorage.getItem('locale')
+    if (saved && supportedLocales.includes(saved)) return saved
+
+    const browserLang = navigator.language || ''
+    if (supportedLocales.includes(browserLang)) return browserLang
+
+    const langPrefix = browserLang.split('-')[0]
+    if (langPrefix === 'zh') {
+        if (browserLang.includes('TW') || browserLang.includes('HK') || browserLang.includes('Hant')) {
+            return 'zh-TW'
+        }
+        return 'zh-CN'
+    }
+    if (langPrefix === 'en') return 'en-US'
+
+    return 'zh-CN'
+}
+
 const i18n = createI18n({
     legacy: false,
-    locale: localStorage.getItem('locale') || 'zh-CN',
+    locale: detectLocale(),
     fallbackLocale: 'zh-CN',
     messages,
 })

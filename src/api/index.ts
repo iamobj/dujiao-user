@@ -1,4 +1,5 @@
 import axios from 'axios'
+import type { InternalAxiosRequestConfig } from 'axios'
 import i18n from '../i18n'
 
 const t = (key: string, params?: Record<string, any>) =>
@@ -32,9 +33,18 @@ const userApi = axios.create({
     timeout: 10000,
 })
 
+// 注入当前语言到请求头
+function injectLocaleHeader(config: InternalAxiosRequestConfig) {
+    const locale = (i18n.global.locale as any).value || i18n.global.locale
+    if (locale) {
+        config.headers['X-Lang'] = locale
+    }
+    return config
+}
+
 // 请求拦截器
 api.interceptors.request.use(
-    (config) => config,
+    (config) => injectLocaleHeader(config),
     (error) => {
         return Promise.reject(error)
     }
@@ -126,6 +136,7 @@ api.interceptors.response.use(
 
 userApi.interceptors.request.use(
     (config) => {
+        injectLocaleHeader(config)
         const token = localStorage.getItem('user_token')
         if (token) {
             config.headers.Authorization = `Bearer ${token}`

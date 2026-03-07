@@ -20,13 +20,14 @@
 
       <!-- Right Side Actions -->
       <div class="flex items-center space-x-2 md:space-x-4">
+        <!-- Cart (desktop only, mobile has bottom nav) -->
         <router-link to="/cart"
-          class="theme-nav-link relative gap-2 px-2 md:px-3 min-w-[44px] min-h-[44px] flex items-center justify-center">
+          class="hidden md:flex theme-nav-link relative gap-2 px-3 min-w-[44px] min-h-[44px] items-center justify-center">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.3 2.6a1 1 0 00.9 1.4H19M7 13l.4 2M10 21a1 1 0 100-2 1 1 0 000 2zm8 1a1 1 0 100-2 1 1 0 000 2z" />
           </svg>
-          <span class="hidden sm:inline text-xs font-medium">{{ t('navbar.cart') }}</span>
+          <span class="text-xs font-medium">{{ t('navbar.cart') }}</span>
           <span v-if="cartCount > 0"
             class="theme-nav-badge absolute -top-1 -right-1"
             :class="{ 'theme-bounce-in': cartBounce }">
@@ -84,18 +85,22 @@
           </div>
         </div>
 
-        <!-- Mobile Menu Button -->
+        <!-- Mobile Menu Button (more menu, not main nav) -->
         <button @click="toggleMobileMenu"
           class="md:hidden theme-nav-link p-2 min-w-[44px] min-h-[44px] flex items-center justify-center">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path v-if="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16" />
-            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="5" r="1.5" fill="currentColor" />
+            <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+            <circle cx="12" cy="19" r="1.5" fill="currentColor" />
           </svg>
         </button>
       </div>
     </div>
 
+  </nav>
+
+  <!-- Teleport drawer outside nav to avoid backdrop-filter containing block bug -->
+  <Teleport to="body">
     <!-- Mobile Drawer Overlay -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
@@ -104,10 +109,10 @@
       leave-active-class="transition duration-200 ease-in"
       leave-from-class="opacity-100"
       leave-to-class="opacity-0">
-      <div v-if="showMobileMenu" class="md:hidden fixed inset-0 top-0 z-40 bg-black/50" @click="showMobileMenu = false" style="overscroll-behavior: none;"></div>
+      <div v-if="showMobileMenu" class="md:hidden fixed inset-0 z-[60] bg-black/50" @click="showMobileMenu = false" style="overscroll-behavior: none;"></div>
     </Transition>
 
-    <!-- Mobile Drawer -->
+    <!-- Mobile Drawer (only items NOT in bottom nav) -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
       enter-from-class="translate-x-full"
@@ -116,11 +121,12 @@
       leave-from-class="translate-x-0"
       leave-to-class="translate-x-full">
       <div v-if="showMobileMenu"
-        class="md:hidden fixed right-0 top-0 bottom-0 z-50 w-72 max-w-[80vw] theme-panel-strong backdrop-blur-xl border-l theme-border overflow-y-auto"
+        class="md:hidden fixed right-0 top-0 bottom-0 z-[70] w-72 max-w-[80vw] theme-panel-strong backdrop-blur-xl border-l theme-border overflow-y-auto"
         style="overscroll-behavior: none;">
-        <div class="p-6 space-y-1">
-          <div class="flex items-center justify-between mb-6">
-            <span class="text-sm font-bold theme-text-primary">{{ t('nav.home') }}</span>
+        <div class="p-5 space-y-1">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-semibold theme-text-muted uppercase tracking-wider">{{ t('navbar.more') }}</span>
             <button @click="showMobileMenu = false" class="p-2 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg theme-btn-neutral">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -128,33 +134,28 @@
             </button>
           </div>
 
-          <router-link v-for="item in menuItems" :key="item.path" :to="item.path" @click="showMobileMenu = false"
+          <!-- Navigation items not in bottom nav: Blog, Notice, About -->
+          <router-link v-for="item in mobileDrawerItems" :key="item.path" :to="item.path" @click="showMobileMenu = false"
             class="block w-full text-left px-4 py-3 rounded-xl theme-nav-link text-sm min-h-[44px] flex items-center"
             active-class="theme-nav-link-active">
             {{ t(item.label) }}
           </router-link>
+
+          <!-- Guest orders (not in bottom nav) -->
           <router-link v-if="!userAuthStore.isAuthenticated" to="/guest/orders" @click="showMobileMenu = false"
             class="block w-full text-left px-4 py-3 rounded-xl theme-nav-link text-sm min-h-[44px] flex items-center"
             active-class="theme-nav-link-active">
             {{ t('navbar.guestOrders') }}
           </router-link>
-          <router-link v-if="!userAuthStore.isAuthenticated" to="/auth/login" @click="showMobileMenu = false"
-            class="block w-full text-left px-4 py-3 rounded-xl theme-nav-link text-sm min-h-[44px] flex items-center"
-            active-class="theme-nav-link-active">
-            {{ t('navbar.login') }}
-          </router-link>
-          <router-link v-if="userAuthStore.isAuthenticated" to="/me" @click="showMobileMenu = false"
-            class="block w-full text-left px-4 py-3 rounded-xl theme-nav-link text-sm min-h-[44px] flex items-center"
-            active-class="theme-nav-link-active">
-            {{ t('navbar.personalCenter') }}
-          </router-link>
+
+          <!-- Logout (login/me already in bottom nav) -->
           <button v-if="userAuthStore.isAuthenticated" @click="userAuthStore.logout(); showMobileMenu = false"
             class="w-full text-left px-4 py-3 rounded-xl text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors font-medium min-h-[44px] flex items-center">
             {{ t('navbar.logout') }}
           </button>
 
-          <!-- Language Switcher in Drawer -->
-          <div class="mt-6 pt-4 border-t theme-border">
+          <!-- Language Switcher -->
+          <div class="mt-4 pt-4 border-t theme-border">
             <span class="text-xs theme-text-muted font-semibold uppercase tracking-wider px-4">{{ t('navbar.selectLanguage') }}</span>
             <div class="mt-2 space-y-1">
               <button v-for="lang in languages" :key="lang.code" @click="changeLanguage(lang.code)"
@@ -171,7 +172,7 @@
         </div>
       </div>
     </Transition>
-  </nav>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -197,6 +198,13 @@ const cartBounce = ref(false)
 const menuItems = [
   { path: '/', label: 'nav.home' },
   { path: '/products', label: 'nav.products' },
+  { path: '/blog', label: 'nav.blog' },
+  { path: '/notice', label: 'nav.notice' },
+  { path: '/about', label: 'nav.about' },
+]
+
+// Mobile drawer only shows items NOT in the bottom nav (Home, Products, Cart, Me are in bottom nav)
+const mobileDrawerItems = [
   { path: '/blog', label: 'nav.blog' },
   { path: '/notice', label: 'nav.notice' },
   { path: '/about', label: 'nav.about' },
