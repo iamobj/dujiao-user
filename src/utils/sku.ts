@@ -91,11 +91,7 @@ export const buildSkuDisplayText = (payload: {
   fallback?: string
   locale?: string
 }) => {
-  const normalizedCode = normalizeText(payload.skuCode)
-  const skuCode = normalizeText(normalizedCode).toUpperCase() === 'DEFAULT' ? '' : normalizedCode
   const specText = formatSkuSpecValues(payload.specValues, payload.locale)
-  if (skuCode && specText) return `${skuCode} · ${specText}`
-  if (skuCode) return skuCode
   if (specText) return specText
   return payload.fallback || ''
 }
