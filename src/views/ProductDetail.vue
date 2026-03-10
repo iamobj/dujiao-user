@@ -463,6 +463,14 @@ const normalizeManualStockTotal = (value: unknown) => {
   return Math.max(integerValue, 0)
 }
 
+const normalizeOptionalLimitNumber = (value: unknown) => {
+  const numberValue = Number(value)
+  if (!Number.isFinite(numberValue)) return null
+  const integerValue = Math.floor(numberValue)
+  if (integerValue <= 0) return null
+  return integerValue
+}
+
 const shouldEnforceSkuStock = (sku: any) => {
   if (!sku) return false
   if (product.value?.fulfillment_type === 'auto') return true
@@ -595,14 +603,21 @@ const addToCart = () => {
   }
   const sku = selectedSku.value
   const available = skuAvailableStock(sku)
+  const nextQuantity = selectedCartQuantity() + 1
+  const productLimit = normalizeOptionalLimitNumber(product.value?.max_purchase_quantity)
+  let effectiveLimit: number | null = productLimit
   if (available !== null) {
-    const nextQuantity = selectedCartQuantity() + 1
-    if (nextQuantity > available) {
+    effectiveLimit = effectiveLimit === null ? available : Math.min(effectiveLimit, available)
+  }
+  if (effectiveLimit !== null && nextQuantity > effectiveLimit) {
+    if (available !== null && effectiveLimit === available && (productLimit === null || available <= productLimit)) {
       purchaseWarning.value = available > 0
         ? t('productDetail.addCartStockExceeded', { count: available })
         : t('productDetail.stockUnavailable')
       return
     }
+    purchaseWarning.value = t('productDetail.addCartLimitExceeded', { count: effectiveLimit })
+    return
   }
   cartStore.addItem({
     productId: product.value.id,
@@ -619,6 +634,7 @@ const addToCart = () => {
     title: product.value.title,
     priceAmount: String(sku?.price_amount || product.value.price_amount || '0.00'),
     image: images.value[0],
+    maxPurchaseQuantity: normalizeOptionalLimitNumber(product.value.max_purchase_quantity) ?? undefined,
     purchaseType: product.value.purchase_type,
     fulfillmentType: product.value.fulfillment_type,
     manualFormSchema: product.value.manual_form_schema || {},

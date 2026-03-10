@@ -250,9 +250,13 @@ const updateQty = (item: CartItem, qty: number) => {
   const key = cartItemKey(item)
   quantityWarnings.value[key] = ''
   const max = itemMaxQuantity(item)
+  const available = itemAvailableStock(item)
+  const purchaseLimit = itemPurchaseLimit(item)
   if (qty > max) {
     if (max <= 0) {
       quantityWarnings.value[key] = t('cart.stockOut')
+    } else if (purchaseLimit !== null && max === purchaseLimit && (available === null || purchaseLimit < available)) {
+      quantityWarnings.value[key] = t('cart.maxPurchaseExceeded', { count: purchaseLimit })
     } else {
       quantityWarnings.value[key] = t('cart.stockExceeded', { count: max })
     }
@@ -301,6 +305,14 @@ const normalizeManualStockTotal = (value: unknown) => {
   return Math.max(integerValue, 0)
 }
 
+const normalizeOptionalLimitNumber = (value: unknown) => {
+  const numberValue = Number(value)
+  if (!Number.isFinite(numberValue)) return null
+  const integerValue = Math.floor(numberValue)
+  if (integerValue <= 0) return null
+  return integerValue
+}
+
 const hasItemStockSnapshot = (item: CartItem) => Boolean(String(item.skuStockSnapshotAt || '').trim())
 
 const shouldEnforceItemStock = (item: CartItem) => {
@@ -330,16 +342,26 @@ const itemAvailableStock = (item: CartItem) => {
   return total
 }
 
+const itemPurchaseLimit = (item: CartItem) => normalizeOptionalLimitNumber(item.maxPurchaseQuantity)
+
 const itemMaxQuantity = (item: CartItem) => {
   const available = itemAvailableStock(item)
-  if (available === null) return 99
-  return Math.max(Math.min(available, 99), 0)
+  const purchaseLimit = itemPurchaseLimit(item)
+  if (available === null && purchaseLimit === null) return Number.MAX_SAFE_INTEGER
+  if (available === null) return purchaseLimit || 0
+  if (purchaseLimit === null) return Math.max(available, 0)
+  return Math.max(Math.min(available, purchaseLimit), 0)
 }
 
 const itemStockHint = (item: CartItem) => {
   const available = itemAvailableStock(item)
+  const purchaseLimit = itemPurchaseLimit(item)
+  const maxQuantity = itemMaxQuantity(item)
   if (available === null) return ''
   if (available <= 0) return t('cart.stockOut')
+  if (purchaseLimit !== null && maxQuantity === purchaseLimit && purchaseLimit < available) {
+    return t('cart.maxPurchaseExceeded', { count: purchaseLimit })
+  }
   return t('cart.stockRemaining', { count: available })
 }
 

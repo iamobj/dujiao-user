@@ -23,6 +23,14 @@ const normalizeManualStockTotal = (value: unknown) => {
 
 const normalizeSkuCode = (value: unknown) => String(value || '').trim().toUpperCase()
 
+const normalizeOptionalLimitNumber = (value: unknown) => {
+  const numberValue = Number(value)
+  if (!Number.isFinite(numberValue)) return undefined
+  const integerValue = Math.floor(numberValue)
+  if (integerValue <= 0) return undefined
+  return integerValue
+}
+
 const resolveActiveSkus = (product: any) => {
   const rows = Array.isArray(product?.skus) ? product.skus : []
   return rows.filter((sku: any) => Boolean(sku?.is_active))
@@ -116,6 +124,7 @@ export const refreshCartStockSnapshots = async (cartStore: CartStoreLike) => {
       skuUpstreamStock: upstreamStock,
       skuStockEnforced,
       skuStockSnapshotAt: new Date().toISOString(),
+      maxPurchaseQuantity: normalizeOptionalLimitNumber(product?.max_purchase_quantity),
     })
   }
 }

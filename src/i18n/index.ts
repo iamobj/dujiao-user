@@ -575,6 +575,7 @@ const messages = {
             stockOut: '该规格已售罄，请减少数量或移除',
             stockRemaining: '该规格剩余 {count} 件',
             stockExceeded: '该规格库存不足，当前购物车最多 {count} 件',
+            maxPurchaseExceeded: '该商品单次下单最多可购买 {count} 件',
         },
         checkout: {
             title: '订单结算',
@@ -845,6 +846,7 @@ const messages = {
             skuStockRemaining: '剩余 {count} 件',
             stockUnavailable: '当前商品库存不足，暂不可购买',
             addCartStockExceeded: '该规格库存不足，当前最多可购买 {count} 件',
+            addCartLimitExceeded: '当前商品单次最多可购买 {count} 件',
         },
         productPurchase: {
             label: '购买身份',
@@ -988,6 +990,7 @@ const messages = {
             skuStockRemaining: '剩餘 {count} 件',
             stockUnavailable: '當前商品庫存不足，暫不可購買',
             addCartStockExceeded: '該規格庫存不足，目前最多可購買 {count} 件',
+            addCartLimitExceeded: '當前商品單次最多可購買 {count} 件',
         },
         productPurchase: {
             label: '購買身份',
@@ -1449,6 +1452,7 @@ const messages = {
             stockOut: '該規格已售罄，請減少數量或移除',
             stockRemaining: '該規格剩餘 {count} 件',
             stockExceeded: '該規格庫存不足，目前購物車最多 {count} 件',
+            maxPurchaseExceeded: '該商品單次下單最多可購買 {count} 件',
         },
         checkout: {
             title: '訂單結算',
@@ -1838,6 +1842,7 @@ const messages = {
             skuStockRemaining: '{count} left',
             stockUnavailable: 'This product is currently out of stock and cannot be purchased',
             addCartStockExceeded: 'Insufficient stock for this SKU. You can purchase up to {count} now',
+            addCartLimitExceeded: 'This product can be purchased up to {count} per order',
         },
         productPurchase: {
             label: 'Purchase type',
@@ -2299,6 +2304,7 @@ const messages = {
             stockOut: 'This SKU is out of stock. Please reduce quantity or remove it',
             stockRemaining: '{count} left for this SKU',
             stockExceeded: 'Insufficient stock for this SKU. Cart quantity can be up to {count}',
+            maxPurchaseExceeded: 'This product can be purchased up to {count} per order',
         },
         checkout: {
             title: 'Checkout',
