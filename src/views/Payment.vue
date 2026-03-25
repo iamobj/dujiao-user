@@ -324,7 +324,10 @@
                   class="text-left border rounded-xl p-4 transition-colors"
                   :class="selectedChannelId === channel.id ? 'theme-selected-surface' : 'theme-interactive-surface'">
                   <div class="flex items-center justify-between gap-2">
-                    <div class="theme-text-primary font-medium">{{ channel.name }}</div>
+                    <div class="flex items-center gap-2">
+                      <img v-if="channel.icon" :src="getImageUrl(channel.icon)" class="h-5 w-5 rounded object-contain shrink-0" />
+                      <div class="theme-text-primary font-medium">{{ channel.name }}</div>
+                    </div>
                     <span v-if="selectedChannelId === channel.id"
                       class="theme-badge theme-badge-accent theme-badge-xs px-2 py-0.5">
                       {{ t('payment.selected') }}
@@ -456,6 +459,7 @@ import { debounceAsync } from '../utils/debounce'
 import { copyText } from '../utils/clipboard'
 import { amountToCents, basisPointsToPercent, calculateFeeCents, centsToAmount, rateToBasisPoints } from '../utils/money'
 import { buildSkuDisplayTextFromSnapshot } from '../utils/sku'
+import { getImageUrl } from '../utils/image'
 import QRCode from 'qrcode'
 import { pageAlertClass, type PageAlert } from '../utils/alerts'
 
