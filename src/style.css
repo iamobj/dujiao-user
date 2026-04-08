@@ -1095,3 +1095,16 @@ html[data-telegram-mini-app="true"] body {
     border-color: var(--ui-border-strong) !important;
   }
 }
+
+/* Unlayered: override Tailwind Typography prose img margins for consecutive images */
+.theme-prose img:has(+ img),
+.theme-prose p:has(> img):has(+ p > img),
+.theme-prose p:has(> img):has(+ p > img) > img {
+  margin-bottom: 0;
+}
+
+.theme-prose img + img,
+.theme-prose p:has(> img) + p:has(> img),
+.theme-prose p:has(> img) + p:has(> img) > img {
+  margin-top: 0;
+}
