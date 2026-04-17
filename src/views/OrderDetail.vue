@@ -348,6 +348,17 @@
                     class="mt-3 theme-surface-soft border rounded-xl p-4 text-sm theme-text-secondary whitespace-pre-wrap break-all overflow-hidden">
                     {{ child.fulfillment.payload }}
                   </div>
+                  <div v-if="child.fulfillment.status === 'delivered' && instructionBlocks(child.items).length"
+                    class="mt-4 space-y-3">
+                    <div v-for="(block, bi) in instructionBlocks(child.items)" :key="`child-inst-${child.id}-${bi}`"
+                      class="rounded-xl border border-blue-200 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/30 p-4">
+                      <div class="flex items-center gap-2 mb-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        {{ t('orderDetail.instructionsTitle') }}
+                      </div>
+                      <div class="prose prose-sm max-w-none dark:prose-invert theme-text-secondary break-words" v-html="block.html"></div>
+                    </div>
+                  </div>
                 </div>
                 <div v-else class="text-sm theme-text-muted">{{ t('orderDetail.childFulfillmentEmpty') }}</div>
               </div>
@@ -396,6 +407,17 @@
             class="mt-4 theme-surface-soft border rounded-xl p-4 text-sm theme-text-secondary whitespace-pre-wrap break-all overflow-hidden">
             {{ order.fulfillment.payload }}
           </div>
+          <div v-if="order.fulfillment.status === 'delivered' && instructionBlocks(order.items).length"
+            class="mt-4 space-y-3">
+            <div v-for="(block, bi) in instructionBlocks(order.items)" :key="`order-inst-${bi}`"
+              class="rounded-xl border border-blue-200 bg-blue-50/50 dark:border-blue-900 dark:bg-blue-950/30 p-4">
+              <div class="flex items-center gap-2 mb-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                {{ t('orderDetail.instructionsTitle') }}
+              </div>
+              <div class="prose prose-sm max-w-none dark:prose-invert theme-text-secondary break-words" v-html="block.html"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -405,6 +427,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import DOMPurify from 'dompurify'
 import { userOrderAPI } from '../api'
 import { useAppStore } from '../stores/app'
 import { useI18n } from 'vue-i18n'
@@ -547,6 +570,28 @@ const getLocalizedText = (jsonData: any) => {
   if (!jsonData) return ''
   const locale = appStore.locale
   return jsonData[locale] || jsonData['zh-CN'] || jsonData['en-US'] || ''
+}
+
+const sanitizeInstructionsHtml = (raw: string) => DOMPurify.sanitize(raw, {
+  ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 's', 'code', 'pre', 'blockquote', 'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'div', 'img', 'hr'],
+  ALLOWED_ATTR: ['href', 'target', 'rel', 'src', 'alt', 'title'],
+  FORBID_ATTR: ['style', 'class', 'id'],
+  ALLOW_DATA_ATTR: false,
+  ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|#|\/(?!\/))/i,
+})
+
+const instructionBlocks = (items: any): Array<{ title: string; html: string }> => {
+  if (!Array.isArray(items)) return []
+  const seen = new Set<string>()
+  const blocks: Array<{ title: string; html: string }> = []
+  for (const item of items) {
+    const html = String(getLocalizedText(item?.instructions) || '').trim()
+    if (!html) continue
+    if (seen.has(html)) continue
+    seen.add(html)
+    blocks.push({ title: getLocalizedText(item?.title), html: sanitizeInstructionsHtml(html) })
+  }
+  return blocks
 }
 
 const refundReasonText = (remark?: string) => {
