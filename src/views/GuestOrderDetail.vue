@@ -177,10 +177,10 @@
                   <div class="text-xs theme-text-muted">{{ t('orderDetail.quantityLabel') }}：{{ item.quantity }}</div>
                   <div v-if="orderItemSkuText(item)" class="text-xs theme-text-muted mt-1">{{ t('orderDetail.itemSkuLabel') }}：{{ orderItemSkuText(item) }}</div>
                   <div class="text-xs theme-text-muted mt-1">
-                    {{ t('orderDetail.itemFulfillmentLabel') }}：{{ fulfillmentTypeLabelText(item.fulfillment_type) }}
+                    {{ t('orderDetail.itemFulfillmentLabel') }}：{{ fulfillmentTypeLabelText(item.fulfillment_type, hasOrderFlowDeliveryTag(item.tags)) }}
                   </div>
-                  <div v-if="item.tags && item.tags.length" class="mt-2 flex flex-wrap gap-2">
-                    <span v-for="(tag, index) in item.tags" :key="index"
+                  <div v-if="visibleItemTags(item).length" class="mt-2 flex flex-wrap gap-2">
+                    <span v-for="(tag, index) in visibleItemTags(item)" :key="index"
                       class="px-2 py-0.5 text-[11px] rounded-full theme-surface-muted border theme-text-muted">
                       {{ tag }}
                     </span>
@@ -263,10 +263,10 @@
                         <div class="text-xs theme-text-muted">{{ t('orderDetail.quantityLabel') }}：{{ item.quantity }}</div>
                         <div v-if="orderItemSkuText(item)" class="text-xs theme-text-muted mt-1">{{ t('orderDetail.itemSkuLabel') }}：{{ orderItemSkuText(item) }}</div>
                         <div class="text-xs theme-text-muted mt-1">
-                          {{ t('orderDetail.itemFulfillmentLabel') }}：{{ fulfillmentTypeLabelText(item.fulfillment_type) }}
+                          {{ t('orderDetail.itemFulfillmentLabel') }}：{{ fulfillmentTypeLabelText(item.fulfillment_type, hasOrderFlowDeliveryTag(item.tags)) }}
                         </div>
-                        <div v-if="item.tags && item.tags.length" class="mt-2 flex flex-wrap gap-2">
-                          <span v-for="(tag, index) in item.tags" :key="index"
+                        <div v-if="visibleItemTags(item).length" class="mt-2 flex flex-wrap gap-2">
+                          <span v-for="(tag, index) in visibleItemTags(item)" :key="index"
                             class="px-2 py-0.5 text-[11px] rounded-full theme-surface-muted border theme-text-muted">
                             {{ tag }}
                           </span>
@@ -433,6 +433,7 @@ import { copyText } from '../utils/clipboard'
 import { amountToCents } from '../utils/money'
 import { buildSkuDisplayTextFromSnapshot } from '../utils/sku'
 import { getImageUrl } from '../utils/image'
+import { getVisibleProductTags, hasOrderFlowDeliveryTag } from '../composables/useProduct'
 
 const route = useRoute()
 const router = useRouter()
@@ -540,11 +541,13 @@ const debouncedLoadOrder = debounceAsync(loadOrder, 300)
 
 const statusLabel = (status: string) => orderStatusLabel(t, status)
 
-const fulfillmentTypeLabelText = (type: string) => fulfillmentTypeLabel(t, type, 'orderDetail')
+const fulfillmentTypeLabelText = (type: string, displayAsAuto = false) => fulfillmentTypeLabel(t, type, 'orderDetail', displayAsAuto)
 
 const fulfillmentStatusLabelText = (status: string) => fulfillmentStatusLabel(t, status, 'orderDetail')
 
 const statusClass = (status: string) => orderStatusClass(status)
+
+const visibleItemTags = (item: any) => getVisibleProductTags(item?.tags)
 
 const resolvedChildStatus = (child: any) => {
   const status = String(child?.status || '').trim()

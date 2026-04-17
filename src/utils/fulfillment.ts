@@ -2,7 +2,7 @@ type TranslateFn = (key: string, params?: Record<string, any>) => string
 
 export type FulfillmentLabelScope = 'orderDetail'
 
-export const fulfillmentTypeLabel = (t: TranslateFn, type?: string, scope: FulfillmentLabelScope = 'orderDetail') => {
+export const fulfillmentTypeLabel = (t: TranslateFn, type?: string, scope: FulfillmentLabelScope = 'orderDetail', displayAsAuto = false) => {
   if (!type) return '-'
   const baseKey = `${scope}.fulfillmentTypes`
   const map: Record<string, string> = {
@@ -10,7 +10,8 @@ export const fulfillmentTypeLabel = (t: TranslateFn, type?: string, scope: Fulfi
     auto: t(`${baseKey}.auto`),
     upstream: t(`${baseKey}.manual`),
   }
-  return map[type] || type
+  const resolvedType = displayAsAuto ? 'auto' : type
+  return map[resolvedType] || resolvedType
 }
 
 export const fulfillmentStatusLabel = (t: TranslateFn, status?: string, scope: FulfillmentLabelScope = 'orderDetail') => {
