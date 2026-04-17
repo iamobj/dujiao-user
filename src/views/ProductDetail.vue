@@ -64,9 +64,9 @@
                   {{ t('productDetail.categoryLabel') }} · {{ categoryName }}
                 </div>
 
-                <div v-if="product.tags && product.tags.length > 0" class="mb-4 flex flex-wrap gap-2">
+                <div v-if="visibleProductTags.length > 0" class="mb-4 flex flex-wrap gap-2">
                   <span
-                    v-for="(tag, index) in product.tags"
+                    v-for="(tag, index) in visibleProductTags"
                     :key="index"
                     class="theme-badge theme-badge-neutral px-3 py-1 text-xs"
                   >
@@ -99,17 +99,17 @@
 
                   <span
                     class="theme-badge"
-                    :class="product.fulfillment_type === 'auto'
+                    :class="displayedAutoFulfillment
                       ? 'theme-badge-info'
                       : 'theme-badge-neutral'"
                   >
-                    <svg v-if="product.fulfillment_type === 'auto'" class="mr-1 h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <svg v-if="displayedAutoFulfillment" class="mr-1 h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
                     </svg>
                     <svg v-else class="mr-1 h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3l3 3m-9.4 9.4l-4 1 1-4 9.9-9.9a2.1 2.1 0 013 3L8.3 18.7z" />
                     </svg>
-                    {{ getFulfillmentTypeLabel(product.fulfillment_type) }}
+                    {{ getFulfillmentTypeLabel(product.fulfillment_type, hasOrderFlowDelivery) }}
                   </span>
 
                   <span
@@ -421,7 +421,23 @@ const buyNowStore = useBuyNowStore()
 const userAuthStore = useUserAuthStore()
 
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
-const { getPurchaseTypeLabel, getFulfillmentTypeLabel, getStockBadgeClass, getStockStatusLabel, hasPromotionPrice, getPromotionPriceAmount, getPromotionSaveAmount, hasSkuPromotionPrice, getSkuPromotionPriceAmount, getSkuPromotionSaveAmount, hasPromotionRules, getPromotionRules } = useProductLabels()
+const {
+  getPurchaseTypeLabel,
+  getFulfillmentTypeLabel,
+  hasOrderFlowDeliveryTag,
+  getVisibleProductTags,
+  isDisplayedAutoFulfillment,
+  getStockBadgeClass,
+  getStockStatusLabel,
+  hasPromotionPrice,
+  getPromotionPriceAmount,
+  getPromotionSaveAmount,
+  hasSkuPromotionPrice,
+  getSkuPromotionPriceAmount,
+  getSkuPromotionSaveAmount,
+  hasPromotionRules,
+  getPromotionRules,
+} = useProductLabels()
 
 const formatPromotionRule = (rule: any) => {
   const amount = formatPrice(rule.min_amount, siteCurrency.value)
@@ -603,6 +619,9 @@ const categoryName = computed(() => {
   const category = product.value?.category?.name
   return category ? getLocalizedText(category) : ''
 })
+const hasOrderFlowDelivery = computed(() => hasOrderFlowDeliveryTag(product.value?.tags))
+const visibleProductTags = computed(() => getVisibleProductTags(product.value?.tags))
+const displayedAutoFulfillment = computed(() => isDisplayedAutoFulfillment(product.value?.fulfillment_type, hasOrderFlowDelivery.value))
 
 const images = computed(() => {
   if (!product.value?.images) return []
@@ -703,6 +722,7 @@ const addToCart = () => {
     maxPurchaseQuantity: normalizeOptionalLimitNumber(product.value.max_purchase_quantity) ?? undefined,
     purchaseType: product.value.purchase_type,
     fulfillmentType: product.value.fulfillment_type,
+    hasOrderFlowDeliveryTag: hasOrderFlowDelivery.value,
     manualFormSchema: product.value.manual_form_schema || {},
     paymentChannelIds: Array.isArray(product.value.payment_channel_ids) && product.value.payment_channel_ids.length > 0 ? product.value.payment_channel_ids : undefined,
     quantity: quantity.value,
@@ -751,6 +771,7 @@ const buyNow = () => {
     maxPurchaseQuantity: normalizeOptionalLimitNumber(product.value.max_purchase_quantity) ?? undefined,
     purchaseType: product.value.purchase_type,
     fulfillmentType: product.value.fulfillment_type,
+    hasOrderFlowDeliveryTag: hasOrderFlowDelivery.value,
     manualFormSchema: product.value.manual_form_schema || {},
     paymentChannelIds: Array.isArray(product.value.payment_channel_ids) && product.value.payment_channel_ids.length > 0 ? product.value.payment_channel_ids : undefined,
     quantity: quantity.value,

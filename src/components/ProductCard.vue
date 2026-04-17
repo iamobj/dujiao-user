@@ -31,9 +31,9 @@
       </div>
 
       <!-- Tags -->
-      <div v-if="!isSoldOut(product) && product.tags && product.tags.length > 0"
+      <div v-if="!isSoldOut(product) && visibleTags.length > 0"
         class="absolute top-2 right-2 md:top-4 md:right-4 z-20 flex flex-wrap gap-1 md:gap-2 justify-end">
-        <span v-for="(tag, tagIndex) in product.tags.slice(0, maxTags)" :key="tagIndex"
+        <span v-for="(tag, tagIndex) in visibleTags.slice(0, maxTags)" :key="tagIndex"
           class="theme-badge theme-badge-inverse px-2 md:px-3 py-0.5 md:py-1 text-xs font-medium">
           {{ tag }}
         </span>
@@ -53,8 +53,8 @@
       <div class="mb-2 md:mb-3 flex flex-wrap items-center gap-1 md:gap-2">
         <!-- Mobile: show only fulfillment type badge -->
         <span class="md:hidden theme-badge text-xs"
-          :class="product.fulfillment_type === 'auto' ? 'theme-badge-info' : 'theme-badge-neutral'">
-          {{ getFulfillmentTypeLabel(product.fulfillment_type) }}
+          :class="displayedAutoFulfillment ? 'theme-badge-info' : 'theme-badge-neutral'">
+          {{ getFulfillmentTypeLabel(product.fulfillment_type, hasOrderFlowDelivery) }}
         </span>
 
         <!-- Desktop: show all badges -->
@@ -73,14 +73,14 @@
         </span>
 
         <span class="hidden md:inline-flex theme-badge"
-          :class="product.fulfillment_type === 'auto' ? 'theme-badge-info' : 'theme-badge-neutral'">
-          <svg v-if="product.fulfillment_type === 'auto'" class="mr-1 h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          :class="displayedAutoFulfillment ? 'theme-badge-info' : 'theme-badge-neutral'">
+          <svg v-if="displayedAutoFulfillment" class="mr-1 h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
           </svg>
           <svg v-else class="mr-1 h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3l3 3m-9.4 9.4l-4 1 1-4 9.9-9.9a2.1 2.1 0 013 3L8.3 18.7z" />
           </svg>
-          {{ getFulfillmentTypeLabel(product.fulfillment_type) }}
+          {{ getFulfillmentTypeLabel(product.fulfillment_type, hasOrderFlowDelivery) }}
         </span>
 
         <span class="hidden md:inline-flex theme-badge"
@@ -153,11 +153,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getFirstImageUrl, getImageUrl } from '../utils/image'
 import { useLocalized, useProductLabels } from '../composables/useProduct'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   product: any
   index?: number
   maxTags?: number
@@ -175,5 +176,21 @@ defineEmits<{
 
 const { t } = useI18n()
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
-const { getPurchaseTypeLabel, getFulfillmentTypeLabel, getStockBadgeClass, getStockStatusLabel, isSoldOut, hasPromotionPrice, getPromotionPriceAmount, hasPromotionRules } = useProductLabels()
+const {
+  getPurchaseTypeLabel,
+  getFulfillmentTypeLabel,
+  hasOrderFlowDeliveryTag,
+  getVisibleProductTags,
+  isDisplayedAutoFulfillment,
+  getStockBadgeClass,
+  getStockStatusLabel,
+  isSoldOut,
+  hasPromotionPrice,
+  getPromotionPriceAmount,
+  hasPromotionRules,
+} = useProductLabels()
+
+const hasOrderFlowDelivery = computed(() => hasOrderFlowDeliveryTag(props.product?.tags))
+const visibleTags = computed(() => getVisibleProductTags(props.product?.tags))
+const displayedAutoFulfillment = computed(() => isDisplayedAutoFulfillment(props.product?.fulfillment_type, hasOrderFlowDelivery.value))
 </script>

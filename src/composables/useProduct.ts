@@ -3,6 +3,29 @@ import { useI18n } from 'vue-i18n'
 import { useAppStore } from '../stores/app'
 import { amountToCents, centsToAmount } from '../utils/money'
 
+export const ORDER_FLOW_DELIVERY_TAG = '订单流交付'
+
+const normalizeTagText = (tag: unknown) => String(tag ?? '').trim()
+
+export const hasOrderFlowDeliveryTag = (tags: unknown) => {
+  if (!Array.isArray(tags)) return false
+  return tags.some((tag) => normalizeTagText(tag) === ORDER_FLOW_DELIVERY_TAG)
+}
+
+export const getVisibleProductTags = (tags: unknown): string[] => {
+  if (!Array.isArray(tags)) return []
+  return tags
+    .map((tag) => (typeof tag === 'string' ? tag : String(tag ?? '')))
+    .filter((tag) => {
+      const normalized = tag.trim()
+      return normalized !== '' && normalized !== ORDER_FLOW_DELIVERY_TAG
+    })
+}
+
+export const isDisplayedAutoFulfillment = (fulfillmentType?: string, orderFlowDelivery = false) => {
+  return fulfillmentType === 'auto' || orderFlowDelivery
+}
+
 export function useLocalized() {
   const appStore = useAppStore()
 
@@ -36,8 +59,10 @@ export function useProductLabels() {
     return purchaseType === 'guest' ? t('productPurchase.guest') : t('productPurchase.member')
   }
 
-  const getFulfillmentTypeLabel = (fulfillmentType: string) => {
-    return fulfillmentType === 'auto' ? t('products.fulfillmentType.auto') : t('products.fulfillmentType.manual')
+  const getFulfillmentTypeLabel = (fulfillmentType: string, orderFlowDelivery = false) => {
+    return isDisplayedAutoFulfillment(fulfillmentType, orderFlowDelivery)
+      ? t('products.fulfillmentType.auto')
+      : t('products.fulfillmentType.manual')
   }
 
   const getStockBadgeClass = (status: string) => {
@@ -115,6 +140,9 @@ export function useProductLabels() {
   return {
     getPurchaseTypeLabel,
     getFulfillmentTypeLabel,
+    hasOrderFlowDeliveryTag,
+    getVisibleProductTags,
+    isDisplayedAutoFulfillment,
     getStockBadgeClass,
     getStockStatusLabel,
     isSoldOut,

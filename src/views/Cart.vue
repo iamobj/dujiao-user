@@ -104,11 +104,11 @@
                       </span>
                       <span
                         class="theme-badge text-xs uppercase tracking-wider"
-                        :class="item.fulfillmentType === 'auto'
+                        :class="itemDisplaysAutoFulfillment(item)
                           ? 'theme-badge-info'
                           : 'theme-badge-neutral'"
                       >
-                        {{ item.fulfillmentType === 'auto' ? t('products.fulfillmentType.auto') : t('products.fulfillmentType.manual') }}
+                        {{ itemFulfillmentLabel(item) }}
                       </span>
                     </div>
                   </div>
@@ -209,7 +209,7 @@ import { amountToCents, centsToAmount, parseInteger } from '../utils/money'
 import { buildSkuDisplayText, normalizeSkuId } from '../utils/sku'
 import { refreshCartStockSnapshots } from '../utils/cartStock'
 import { getImageUrl } from '../utils/image'
-import { useLocalized } from '../composables/useProduct'
+import { useLocalized, useProductLabels } from '../composables/useProduct'
 import { toast } from '../composables/useToast'
 
 const cartStore = useCartStore()
@@ -217,6 +217,7 @@ const appStore = useAppStore()
 const { t } = useI18n()
 
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
+const { getFulfillmentTypeLabel, isDisplayedAutoFulfillment } = useProductLabels()
 const totalCurrency = computed(() => siteCurrency.value || 'CNY')
 
 const cartItems = computed(() => cartStore.items)
@@ -305,6 +306,10 @@ const cartItemImage = (item: CartItem) => {
   if (!rawImage) return ''
   return getImageUrl(rawImage)
 }
+
+const itemDisplaysAutoFulfillment = (item: CartItem) => isDisplayedAutoFulfillment(item.fulfillmentType, item.hasOrderFlowDeliveryTag)
+
+const itemFulfillmentLabel = (item: CartItem) => getFulfillmentTypeLabel(item.fulfillmentType || '', item.hasOrderFlowDeliveryTag)
 
 const normalizeStockNumber = (value: unknown) => {
   const numberValue = Number(value)

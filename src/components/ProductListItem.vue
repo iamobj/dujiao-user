@@ -40,7 +40,7 @@
         <h3 class="text-xs sm:text-sm font-semibold theme-text-primary truncate">
           {{ getLocalizedText(product.title) }}
         </h3>
-        <span v-for="(tag, tagIndex) in (product.tags || []).slice(0, 1)" :key="tagIndex"
+        <span v-for="(tag, tagIndex) in visibleTags.slice(0, 1)" :key="tagIndex"
           class="hidden md:inline-flex theme-badge theme-badge-inverse text-[10px] px-1.5 py-0 flex-shrink-0">
           {{ tag }}
         </span>
@@ -50,8 +50,8 @@
       <div class="flex flex-wrap items-center gap-1">
         <!-- Mobile: fulfillment + stock warning -->
         <span class="sm:hidden theme-badge text-[10px]"
-          :class="product.fulfillment_type === 'auto' ? 'theme-badge-info' : 'theme-badge-neutral'">
-          {{ getFulfillmentTypeLabel(product.fulfillment_type) }}
+          :class="displayedAutoFulfillment ? 'theme-badge-info' : 'theme-badge-neutral'">
+          {{ getFulfillmentTypeLabel(product.fulfillment_type, hasOrderFlowDelivery) }}
         </span>
         <span v-if="product.stock_status === 'out_of_stock' || product.stock_status === 'low_stock'"
           class="sm:hidden theme-badge text-[10px]"
@@ -65,8 +65,8 @@
           {{ getPurchaseTypeLabel(product.purchase_type) }}
         </span>
         <span class="hidden sm:inline-flex theme-badge text-[10px]"
-          :class="product.fulfillment_type === 'auto' ? 'theme-badge-info' : 'theme-badge-neutral'">
-          {{ getFulfillmentTypeLabel(product.fulfillment_type) }}
+          :class="displayedAutoFulfillment ? 'theme-badge-info' : 'theme-badge-neutral'">
+          {{ getFulfillmentTypeLabel(product.fulfillment_type, hasOrderFlowDelivery) }}
         </span>
         <span class="hidden sm:inline-flex theme-badge text-[10px]"
           :class="getStockBadgeClass(product.stock_status)">
@@ -124,11 +124,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getFirstImageUrl, getImageUrl } from '../utils/image'
 import { useLocalized, useProductLabels } from '../composables/useProduct'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   product: any
   index?: number
   animationStep?: number
@@ -144,5 +145,21 @@ defineEmits<{
 
 const { t } = useI18n()
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
-const { getPurchaseTypeLabel, getFulfillmentTypeLabel, getStockBadgeClass, getStockStatusLabel, isSoldOut, hasPromotionPrice, getPromotionPriceAmount, hasPromotionRules } = useProductLabels()
+const {
+  getPurchaseTypeLabel,
+  getFulfillmentTypeLabel,
+  hasOrderFlowDeliveryTag,
+  getVisibleProductTags,
+  isDisplayedAutoFulfillment,
+  getStockBadgeClass,
+  getStockStatusLabel,
+  isSoldOut,
+  hasPromotionPrice,
+  getPromotionPriceAmount,
+  hasPromotionRules,
+} = useProductLabels()
+
+const hasOrderFlowDelivery = computed(() => hasOrderFlowDeliveryTag(props.product?.tags))
+const visibleTags = computed(() => getVisibleProductTags(props.product?.tags))
+const displayedAutoFulfillment = computed(() => isDisplayedAutoFulfillment(props.product?.fulfillment_type, hasOrderFlowDelivery.value))
 </script>

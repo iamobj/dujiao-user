@@ -100,9 +100,9 @@
                 <div class="mt-1.5 flex flex-wrap items-center gap-1">
                   <span
                     class="theme-badge text-[10px] px-1.5 py-px"
-                    :class="product.fulfillment_type === 'auto' ? 'theme-badge-info' : 'theme-badge-neutral'"
+                    :class="displayedAutoFulfillment ? 'theme-badge-info' : 'theme-badge-neutral'"
                   >
-                    {{ getFulfillmentTypeLabel(product.fulfillment_type) }}
+                    {{ getFulfillmentTypeLabel(product.fulfillment_type, hasOrderFlowDelivery) }}
                   </span>
                   <span
                     class="theme-badge text-[10px] px-1.5 py-px"
@@ -343,6 +343,8 @@ const userAuthStore = useUserAuthStore()
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
 const {
   getFulfillmentTypeLabel,
+  hasOrderFlowDeliveryTag,
+  isDisplayedAutoFulfillment,
   getStockBadgeClass,
   getStockStatusLabel,
   isSoldOut,
@@ -358,6 +360,8 @@ const selectedSkuId = ref(0)
 const quantity = ref(1)
 const purchaseWarning = ref('')
 
+const hasOrderFlowDelivery = computed(() => hasOrderFlowDeliveryTag(props.product?.tags))
+const displayedAutoFulfillment = computed(() => isDisplayedAutoFulfillment(props.product?.fulfillment_type, hasOrderFlowDelivery.value))
 const productTitle = computed(() => getLocalizedText(props.product?.title))
 const productDescription = computed(() => getLocalizedText(props.product?.description))
 
@@ -602,6 +606,7 @@ const handleAddToCart = () => {
     maxPurchaseQuantity: normalizeOptionalLimitNumber(props.product.max_purchase_quantity) ?? undefined,
     purchaseType: props.product.purchase_type,
     fulfillmentType: props.product.fulfillment_type,
+    hasOrderFlowDeliveryTag: hasOrderFlowDelivery.value,
     manualFormSchema: props.product.manual_form_schema || {},
     paymentChannelIds: Array.isArray(props.product.payment_channel_ids) && props.product.payment_channel_ids.length > 0 ? props.product.payment_channel_ids : undefined,
     quantity: 1,
@@ -648,6 +653,7 @@ const handleBuyNow = () => {
     maxPurchaseQuantity: normalizeOptionalLimitNumber(props.product.max_purchase_quantity) ?? undefined,
     purchaseType: props.product.purchase_type,
     fulfillmentType: props.product.fulfillment_type,
+    hasOrderFlowDeliveryTag: hasOrderFlowDelivery.value,
     manualFormSchema: props.product.manual_form_schema || {},
     paymentChannelIds: Array.isArray(props.product.payment_channel_ids) && props.product.payment_channel_ids.length > 0 ? props.product.payment_channel_ids : undefined,
     quantity: quantity.value,

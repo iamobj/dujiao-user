@@ -106,11 +106,11 @@
                         </span>
                         <span
                           class="theme-badge text-xs uppercase tracking-wider"
-                          :class="item.fulfillmentType === 'auto'
+                          :class="itemDisplaysAutoFulfillment(item)
                             ? 'theme-badge-info'
                             : 'theme-badge-neutral'"
                         >
-                          {{ item.fulfillmentType === 'auto' ? t('products.fulfillmentType.auto') : t('products.fulfillmentType.manual') }}
+                          {{ itemFulfillmentLabel(item) }}
                         </span>
                       </div>
                     </div>
@@ -349,7 +349,7 @@ import { getAffiliateCode, getAffiliateVisitorKey } from '../utils/affiliate'
 import ImageCaptcha from '../components/captcha/ImageCaptcha.vue'
 import TurnstileCaptcha from '../components/captcha/TurnstileCaptcha.vue'
 import CheckoutManualForm from '../components/checkout/CheckoutManualForm.vue'
-import { useLocalized } from '../composables/useProduct'
+import { useLocalized, useProductLabels } from '../composables/useProduct'
 
 const router = useRouter()
 const route = useRoute()
@@ -360,6 +360,7 @@ const userAuthStore = useUserAuthStore()
 const { t } = useI18n()
 
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
+const { getFulfillmentTypeLabel, isDisplayedAutoFulfillment } = useProductLabels()
 
 const isBuyNowMode = computed(() => route.query.mode === 'buynow')
 const cartItems = computed<CartItem[]>(() => {
@@ -1247,6 +1248,10 @@ const checkoutItemImage = (item: CartItem) => {
   if (!rawImage) return ''
   return getImageUrl(rawImage)
 }
+
+const itemDisplaysAutoFulfillment = (item: CartItem) => isDisplayedAutoFulfillment(item.fulfillmentType, item.hasOrderFlowDeliveryTag)
+
+const itemFulfillmentLabel = (item: CartItem) => getFulfillmentTypeLabel(item.fulfillmentType || '', item.hasOrderFlowDeliveryTag)
 
 const itemSubtotal = (item: CartItem) => {
   const amountCents = amountToCents(item.priceAmount)
