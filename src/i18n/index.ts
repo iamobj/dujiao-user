@@ -4,7 +4,7 @@ import { createI18n } from 'vue-i18n'
 const messages = {
     'zh-CN': {
         common: {
-            siteName: 'Dujiao-Next',
+            siteName: '',
             loading: '加载中...',
             error: '错误',
             success: '成功',
@@ -980,7 +980,7 @@ const messages = {
     },
     'zh-TW': {
         common: {
-            siteName: 'Dujiao-Next',
+            siteName: '',
             loading: '載入中...',
             error: '錯誤',
             success: '成功',
@@ -1956,7 +1956,7 @@ const messages = {
     },
     'en-US': {
         common: {
-            siteName: 'Dujiao-Next',
+            siteName: '',
             loading: 'Loading...',
             error: 'Error',
             success: 'Success',
@@ -2024,7 +2024,7 @@ const messages = {
         },
         home: {
             hero: {
-                title: 'Dujiao-Next',
+                title: '',
                 subtitle: 'Professional Products and Services Provider',
                 cta: 'Browse Products',
                 badge: 'Next Gen Digital Store',
