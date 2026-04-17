@@ -7,8 +7,8 @@
         <div class="col-span-2 space-y-6">
           <div class="flex items-center space-x-3">
             <div
-              class="w-8 h-8 theme-btn-primary rounded-lg flex items-center justify-center">
-              <span class="text-white font-black text-sm">{{ brandInitial }}</span>
+              class="w-8 h-8 rounded-lg flex items-center justify-center">
+              <img src="/icon.webp" alt="Site Icon" class="w-full h-full rounded-lg object-cover">
             </div>
             <h3 class="theme-text-primary text-xl font-bold tracking-tight">{{ brandSiteName }}</h3>
           </div>
@@ -129,10 +129,6 @@ const brandDescription = computed(() => {
     return typeof val === 'string' ? val.trim() : ''
   }
   return ''
-})
-
-const brandInitial = computed(() => {
-  return brandSiteName.value.charAt(0).toUpperCase()
 })
 
 const isListMode = computed(() => config.value?.template_mode === 'list')
