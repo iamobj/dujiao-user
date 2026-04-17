@@ -173,3 +173,9 @@ git push origin main
 ## 一句话原则
 
 日常开发合并到你自己的 `main`，官方更新通过 `upstream/main` 再合并进来，这样最适合长期二开和持续跟进源仓库。
+
+## 发布
+```bash
+npm run release:tag
+```
+等镜像发布完成，就去服务器更新 user 端镜像tag
