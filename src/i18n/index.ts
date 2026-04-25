@@ -55,6 +55,26 @@ const messages = {
             notice: '公告',
             about: '关于',
         },
+        breadcrumb: {
+            label: '面包屑导航',
+            back: '返回{name}',
+        },
+        emptyState: {
+            default: '暂无内容',
+            search: '未找到相关内容',
+            error: '加载失败',
+            clearFilters: '清除筛选',
+            goProducts: '去逛逛',
+            retry: '重试',
+        },
+        pagination: {
+            label: '分页导航',
+            previous: '上一页',
+            next: '下一页',
+        },
+        checkoutSteps: {
+            label: '购买流程进度',
+        },
         footer: {
             description: '专业的在线工作室，为您提供优质的产品和服务。',
             quickLinks: '快速链接',
@@ -101,6 +121,10 @@ const messages = {
         },
         products: {
             subtitle: '浏览我们的精选商品',
+            priceAria: '价格 {price}',
+            promotionPriceAria: '促销价 {price}',
+            originalPriceAria: '原价 {price}',
+            quickBuyAria: '快速购买',
             categories: '分类',
             allCategories: '全部商品',
             empty: '暂无商品',
@@ -520,6 +544,8 @@ const messages = {
                 countdown: '{seconds}s',
                 captchaLabel: '验证码',
                 captchaRequired: '请先完成验证码',
+                showPassword: '显示密码',
+                hidePassword: '隐藏密码',
             },
             login: {
                 title: '用户登录',
@@ -841,7 +867,6 @@ const messages = {
         orderDetail: {
             title: '订单详情',
             subtitle: '查看订单状态与交付信息',
-            backList: '返回订单列表',
             notFound: '订单不存在或已被删除',
             payNow: '去支付',
             cancel: '取消订单',
@@ -1031,6 +1056,26 @@ const messages = {
             notice: '公告',
             about: '關於',
         },
+        breadcrumb: {
+            label: '麵包屑導航',
+            back: '返回{name}',
+        },
+        emptyState: {
+            default: '暫無內容',
+            search: '未找到相關內容',
+            error: '載入失敗',
+            clearFilters: '清除篩選',
+            goProducts: '去逛逛',
+            retry: '重試',
+        },
+        pagination: {
+            label: '分頁導航',
+            previous: '上一頁',
+            next: '下一頁',
+        },
+        checkoutSteps: {
+            label: '購買流程進度',
+        },
         footer: {
             description: '專業的線上工作室，為您提供優質的產品和服務。',
             quickLinks: '快速連結',
@@ -1077,6 +1122,10 @@ const messages = {
         },
         products: {
             subtitle: '瀏覽我們的精選商品',
+            priceAria: '價格 {price}',
+            promotionPriceAria: '促銷價 {price}',
+            originalPriceAria: '原價 {price}',
+            quickBuyAria: '快速購買',
             categories: '分類',
             allCategories: '全部商品',
             empty: '暫無商品',
@@ -1535,6 +1584,8 @@ const messages = {
                 countdown: '{seconds}s',
                 captchaLabel: '驗證碼',
                 captchaRequired: '請先完成驗證碼',
+                showPassword: '顯示密碼',
+                hidePassword: '隱藏密碼',
             },
             login: {
                 title: '用戶登入',
@@ -1856,7 +1907,6 @@ const messages = {
         orderDetail: {
             title: '訂單詳情',
             subtitle: '查看訂單狀態與交付資訊',
-            backList: '返回訂單列表',
             notFound: '訂單不存在或已被刪除',
             payNow: '去支付',
             cancel: '取消訂單',
@@ -2007,6 +2057,26 @@ const messages = {
             notice: 'Notice',
             about: 'About',
         },
+        breadcrumb: {
+            label: 'Breadcrumb',
+            back: 'Back to {name}',
+        },
+        emptyState: {
+            default: 'Nothing here yet',
+            search: 'No results found',
+            error: 'Failed to load',
+            clearFilters: 'Clear filters',
+            goProducts: 'Browse products',
+            retry: 'Retry',
+        },
+        pagination: {
+            label: 'Pagination',
+            previous: 'Previous page',
+            next: 'Next page',
+        },
+        checkoutSteps: {
+            label: 'Checkout progress',
+        },
         footer: {
             description: 'Professional online studio providing quality products and services.',
             quickLinks: 'Quick Links',
@@ -2053,6 +2123,10 @@ const messages = {
         },
         products: {
             subtitle: 'Browse our featured products',
+            priceAria: 'Price {price}',
+            promotionPriceAria: 'Promotional price {price}',
+            originalPriceAria: 'Original price {price}',
+            quickBuyAria: 'Quick buy',
             categories: 'Categories',
             allCategories: 'All Products',
             empty: 'No products available',
@@ -2511,6 +2585,8 @@ const messages = {
                 countdown: '{seconds}s',
                 captchaLabel: 'Captcha',
                 captchaRequired: 'Please complete captcha verification first',
+                showPassword: 'Show password',
+                hidePassword: 'Hide password',
             },
             login: {
                 title: 'User Login',
@@ -2832,7 +2908,6 @@ const messages = {
         orderDetail: {
             title: 'Order Detail',
             subtitle: 'Check order status and fulfillment',
-            backList: 'Back to orders',
             notFound: 'Order not found or deleted',
             payNow: 'Pay now',
             cancel: 'Cancel order',

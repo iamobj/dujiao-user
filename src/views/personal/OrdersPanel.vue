@@ -70,7 +70,7 @@
               v-model.trim="orderFilters.orderNo"
               type="text"
               :placeholder="t('orders.filters.orderNoPlaceholder')"
-              class="h-11 w-full rounded-xl px-4 theme-input placeholder:text-gray-400"
+              class="h-11 w-full form-input-lg placeholder:text-gray-400"
               @input="handleOrderNoInput"
               @keyup.enter="applyOrderFilters"
             />
@@ -80,7 +80,7 @@
             <label class="mb-1 block text-xs font-semibold theme-text-muted">{{ t('orders.filters.status') }}</label>
             <select
               v-model="orderFilters.status"
-              class="h-11 w-full rounded-xl px-4 theme-input"
+              class="h-11 w-full form-input-lg"
               @change="handleOrderStatusChange"
             >
               <option v-for="item in orderStatusOptions" :key="item.value || 'all'" :value="item.value">
@@ -222,7 +222,7 @@
               v-model.trim="rechargeFilters.rechargeNo"
               type="text"
               :placeholder="t('orders.rechargeFilters.rechargeNoPlaceholder')"
-              class="h-11 w-full rounded-xl px-4 theme-input placeholder:text-gray-400"
+              class="h-11 w-full form-input-lg placeholder:text-gray-400"
               @input="handleRechargeNoInput"
               @keyup.enter="applyRechargeFilters"
             />
@@ -232,7 +232,7 @@
             <label class="mb-1 block text-xs font-semibold theme-text-muted">{{ t('orders.filters.status') }}</label>
             <select
               v-model="rechargeFilters.status"
-              class="h-11 w-full rounded-xl px-4 theme-input"
+              class="h-11 w-full form-input-lg"
               @change="handleRechargeStatusChange"
             >
               <option v-for="item in rechargeStatusOptions" :key="item.value || 'all'" :value="item.value">
