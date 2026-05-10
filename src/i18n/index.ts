@@ -821,7 +821,8 @@ const messages = {
             providerTypes: {
                 official: '官方',
                 epay: '易支付',
-                epusdt: 'BEpusdt',
+                bepusdt: 'BEpusdt',
+                epusdt: 'epusdt',
                 tokenpay: 'TokenPay',
             },
             modeQr: '二维码支付',
@@ -1933,7 +1934,8 @@ const messages = {
             providerTypes: {
                 official: '官方',
                 epay: '易支付',
-                epusdt: 'BEpusdt',
+                bepusdt: 'BEpusdt',
+                epusdt: 'epusdt',
                 tokenpay: 'TokenPay',
             },
             modeQr: '二維碼支付',
@@ -3004,7 +3006,8 @@ const messages = {
             providerTypes: {
                 official: 'Official',
                 epay: 'Epay',
-                epusdt: 'BEpusdt',
+                bepusdt: 'BEpusdt',
+                epusdt: 'epusdt',
                 tokenpay: 'TokenPay',
             },
             modeQr: 'QR payment',
