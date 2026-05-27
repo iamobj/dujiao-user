@@ -182,6 +182,11 @@ const messages = {
             subtitle: '重要公告和通知',
             empty: '暂无公告',
         },
+        announcement: {
+            close: '关闭',
+            dismissToday: '今日不再提示',
+            dismissForever: '不再提示',
+        },
         about: {
             title: '关于我们',
             subtitle: '了解Dujiao-Next',
@@ -358,6 +363,10 @@ const messages = {
                 telegramUnbindDisabledTip: '当前账号尚未绑定真实邮箱，暂不允许解绑 Telegram',
                 telegramWidgetLoadFailed: 'Telegram 登录组件加载失败，请刷新后重试',
                 telegramInvalidPayload: 'Telegram 返回参数无效，请重试',
+                telegramOidcBindButton: '使用 Telegram 绑定',
+                telegramOidcBindHint: '将跳转到 Telegram 完成授权后返回',
+                telegramOidcBindFailed: 'Telegram 绑定失败，请重试',
+                telegramBoundOk: 'Telegram 绑定成功',
                 twofa: {
                     title: '两步验证 (2FA)',
                     subtitle: '使用身份验证器（如 Google Authenticator、1Password 等）为账号增加额外安全保护。',
@@ -620,6 +629,8 @@ const messages = {
                 telegramLoginFailed: 'Telegram 登录失败，请稍后重试',
                 telegramWidgetLoadFailed: 'Telegram 登录组件加载失败，请刷新后重试',
                 telegramInvalidPayload: 'Telegram 返回参数无效，请重试',
+                telegramOidcButton: '使用 Telegram 登录',
+                telegramOidcHint: '将跳转到 Telegram 完成授权后返回',
                 totp: {
                     title: '两步验证',
                     subtitle: '请输入身份验证器中的 6 位动态码完成登录。',
@@ -638,6 +649,11 @@ const messages = {
                     recoveryRequired: '请输入恢复码',
                     verifyFailed: '验证失败，请确认输入是否正确',
                 },
+            },
+            telegramCallback: {
+                processing: '正在处理 Telegram 登录…',
+                failed: 'Telegram 登录失败，请重试',
+                backToLogin: '返回登录',
             },
             register: {
                 title: '用户注册',
@@ -1299,6 +1315,11 @@ const messages = {
             subtitle: '重要公告和通知',
             empty: '暫無公告',
         },
+        announcement: {
+            close: '關閉',
+            dismissToday: '今日不再提示',
+            dismissForever: '不再提示',
+        },
         about: {
             title: '關於我們',
             subtitle: '了解Dujiao-Next',
@@ -1475,6 +1496,10 @@ const messages = {
                 telegramUnbindDisabledTip: '目前帳號尚未綁定真實信箱，暫不允許解除綁定 Telegram',
                 telegramWidgetLoadFailed: 'Telegram 登入元件載入失敗，請重新整理後重試',
                 telegramInvalidPayload: 'Telegram 回傳參數無效，請重試',
+                telegramOidcBindButton: '使用 Telegram 綁定',
+                telegramOidcBindHint: '將跳轉到 Telegram 完成授權後返回',
+                telegramOidcBindFailed: 'Telegram 綁定失敗，請重試',
+                telegramBoundOk: 'Telegram 綁定成功',
                 twofa: {
                     title: '兩步驟驗證 (2FA)',
                     subtitle: '使用驗證器（如 Google Authenticator、1Password 等）為帳號增加額外保護。',
@@ -1737,6 +1762,8 @@ const messages = {
                 telegramLoginFailed: 'Telegram 登入失敗，請稍後重試',
                 telegramWidgetLoadFailed: 'Telegram 登入元件載入失敗，請重新整理後重試',
                 telegramInvalidPayload: 'Telegram 回傳參數無效，請重試',
+                telegramOidcButton: '使用 Telegram 登入',
+                telegramOidcHint: '將跳轉到 Telegram 完成授權後返回',
                 totp: {
                     title: '兩步驟驗證',
                     subtitle: '請輸入驗證器中的 6 位動態碼以完成登入。',
@@ -1755,6 +1782,11 @@ const messages = {
                     recoveryRequired: '請輸入恢復碼',
                     verifyFailed: '驗證失敗，請確認輸入是否正確',
                 },
+            },
+            telegramCallback: {
+                processing: '正在處理 Telegram 登入…',
+                failed: 'Telegram 登入失敗，請重試',
+                backToLogin: '返回登入',
             },
             register: {
                 title: '用戶註冊',
@@ -2375,6 +2407,11 @@ const messages = {
             subtitle: 'Important notices and announcements',
             empty: 'No notices',
         },
+        announcement: {
+            close: 'Close',
+            dismissToday: "Don't show today",
+            dismissForever: "Don't show again",
+        },
         about: {
             title: 'About Us',
             subtitle: 'Learn about Dujiao-Next',
@@ -2551,6 +2588,10 @@ const messages = {
                 telegramUnbindDisabledTip: 'Bind a real email before unbinding Telegram',
                 telegramWidgetLoadFailed: 'Failed to load Telegram widget, please refresh and retry',
                 telegramInvalidPayload: 'Invalid Telegram response, please retry',
+                telegramOidcBindButton: 'Link with Telegram',
+                telegramOidcBindHint: 'You will be redirected to Telegram to authorize and then return.',
+                telegramOidcBindFailed: 'Failed to link Telegram, please try again.',
+                telegramBoundOk: 'Telegram linked successfully',
                 twofa: {
                     title: 'Two-Factor Authentication (2FA)',
                     subtitle: 'Add an extra layer of security with an authenticator app such as Google Authenticator or 1Password.',
@@ -2813,6 +2854,8 @@ const messages = {
                 telegramLoginFailed: 'Telegram login failed, please try again later',
                 telegramWidgetLoadFailed: 'Failed to load Telegram widget, please refresh and retry',
                 telegramInvalidPayload: 'Invalid Telegram response, please retry',
+                telegramOidcButton: 'Log in with Telegram',
+                telegramOidcHint: 'You will be redirected to Telegram to authorize and then return.',
                 totp: {
                     title: 'Two-Factor Authentication',
                     subtitle: 'Enter the 6-digit code from your authenticator app to complete sign-in.',
@@ -2831,6 +2874,11 @@ const messages = {
                     recoveryRequired: 'Please enter a recovery code',
                     verifyFailed: 'Verification failed, please check your input',
                 },
+            },
+            telegramCallback: {
+                processing: 'Processing Telegram login…',
+                failed: 'Telegram login failed, please try again.',
+                backToLogin: 'Back to login',
             },
             register: {
                 title: 'User Registration',
