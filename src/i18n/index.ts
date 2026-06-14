@@ -3333,7 +3333,7 @@ const messages = {
 
 const supportedLocales = ['zh-CN', 'zh-TW', 'en-US']
 
-function detectLocale(): string {
+export function detectLocale(): string {
     const saved = localStorage.getItem('locale')
     if (saved && supportedLocales.includes(saved)) return saved
 
