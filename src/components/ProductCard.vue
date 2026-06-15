@@ -122,6 +122,11 @@
               {{ t('products.promotionTag') }}
             </span>
           </div>
+          <div v-else-if="hasWholesalePrices(product)" class="mt-0.5 flex flex-wrap items-center gap-1.5">
+            <span class="theme-badge theme-badge-success theme-badge-xs">
+              {{ t('products.wholesaleTag') }}
+            </span>
+          </div>
           <div v-else-if="hasPromotionRules(product)" class="mt-0.5 flex flex-wrap items-center gap-1.5">
             <span class="theme-badge theme-badge-warning theme-badge-xs">
               {{ t('products.promotionBadge') }}
@@ -204,6 +209,7 @@ const {
   hasPromotionPrice,
   getPromotionPriceAmount,
   hasPromotionRules,
+  hasWholesalePrices,
 } = useProductLabels()
 
 const hasOrderFlowDelivery = computed(() => hasOrderFlowDeliveryTag(props.product?.tags))

@@ -224,6 +224,15 @@
                 {{ formatDiscountPrice(previewPromotion, previewCurrency) }}
               </span>
             </div>
+            <div class="flex items-center justify-between">
+              <span>{{ t('checkout.previewWholesale') }}</span>
+              <span
+                class="font-mono"
+                :class="hasPositiveAmount(previewWholesale) ? 'text-emerald-600 dark:text-emerald-300' : 'theme-text-primary'"
+              >
+                {{ formatDiscountPrice(previewWholesale, previewCurrency) }}
+              </span>
+            </div>
             <div v-if="Number(previewMemberDiscount) > 0" class="flex items-center justify-between">
               <span>{{ t('checkout.previewMemberDiscount') }}</span>
               <span class="font-mono text-amber-600 dark:text-amber-300">-{{ formatPrice(previewMemberDiscount, previewCurrency) }}</span>
@@ -353,7 +362,7 @@ const userAuthStore = useUserAuthStore()
 const { t } = useI18n()
 
 const { getLocalizedText, siteCurrency, formatPrice } = useLocalized()
-const { getFulfillmentTypeLabel, isDisplayedAutoFulfillment } = useProductLabels()
+const { getFulfillmentTypeLabel, isDisplayedAutoFulfillment, resolveWholesalePriceAmount } = useProductLabels()
 
 const isBuyNowMode = computed(() => route.query.mode === 'buynow')
 const cartItems = computed<CartItem[]>(() => {
@@ -533,6 +542,7 @@ const previewCurrency = computed(() => preview.value?.currency || totalCurrency.
 const previewOriginal = computed(() => preview.value?.original_amount ?? totalAmount.value)
 const previewCoupon = computed(() => preview.value?.discount_amount ?? '0')
 const previewPromotion = computed(() => preview.value?.promotion_discount_amount ?? '0')
+const previewWholesale = computed(() => preview.value?.wholesale_discount_amount ?? '0')
 const previewMemberDiscount = computed(() => preview.value?.member_discount_amount ?? '0')
 const previewTotal = computed(() => preview.value?.total_amount ?? totalAmount.value)
 const checkoutItemCurrency = computed(() => previewCurrency.value)
@@ -542,6 +552,17 @@ const previewItemsByKey = computed(() => {
   const items = Array.isArray(preview.value?.items) ? preview.value.items : []
   for (const item of items) {
     map.set(`${item.product_id}:${normalizeSkuId(item.sku_id)}`, item)
+  }
+  return map
+})
+
+const cartProductQuantities = computed(() => {
+  const map = new Map<number, number>()
+  for (const item of cartItems.value) {
+    const productId = Number(item.productId || 0)
+    const qty = parseInteger(item.quantity)
+    if (!Number.isFinite(productId) || productId <= 0 || qty === null || qty <= 0) continue
+    map.set(productId, (map.get(productId) || 0) + qty)
   }
   return map
 })
@@ -1266,6 +1287,18 @@ const cartItemSubtotalCents = (item: CartItem) => {
   return amountCents * qty
 }
 
+const cartItemWholesaleSubtotalCents = (item: CartItem) => {
+  const qty = parseInteger(item.quantity)
+  if (qty === null || qty <= 0 || !Array.isArray(item.wholesalePrices)) {
+    return null
+  }
+  const productId = Number(item.productId || 0)
+  const matchQuantity = cartProductQuantities.value.get(productId) || qty
+  const matchedPriceCents = amountToCents(resolveWholesalePriceAmount(item, item.priceAmount, matchQuantity))
+  if (matchedPriceCents === null) return null
+  return matchedPriceCents * qty
+}
+
 const checkoutItemPreview = (item: CartItem) => previewItemsByKey.value.get(cartItemKey(item))
 
 const checkoutItemOriginalCents = (item: CartItem) => {
@@ -1282,6 +1315,8 @@ const checkoutItemPayableCents = (item: CartItem) => {
     const couponDiscountCents = amountToCents(previewItem?.coupon_discount_amount) || 0
     return Math.max(0, previewPayableCents - couponDiscountCents)
   }
+  const wholesaleSubtotal = cartItemWholesaleSubtotalCents(item)
+  if (wholesaleSubtotal !== null) return wholesaleSubtotal
   return checkoutItemOriginalCents(item)
 }
 
