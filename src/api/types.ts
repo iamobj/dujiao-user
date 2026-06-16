@@ -287,6 +287,61 @@ export interface ResellerSiteConfigSnapshotData {
     config?: ResellerSiteConfigData
 }
 
+export type ResellerPricingMode = 'inherit' | 'markup_percent' | 'fixed_markup' | 'fixed_price'
+
+export interface ResellerProductSettingData {
+    id?: number
+    product_id: number
+    sku_id: number
+    is_listed: boolean
+    pricing_mode: ResellerPricingMode | string
+    markup_percent: string
+    fixed_markup_amount: string
+    fixed_price_amount: string
+    effective_price_amount?: string
+    rule_source?: string
+    sort_order: number
+    updated_at?: string
+}
+
+export interface ResellerProductSettingSKUData {
+    id: number
+    sku_code: string
+    spec_values: Record<string, string>
+    base_price_amount: string
+    is_active: boolean
+    setting?: ResellerProductSettingData
+    effective_price_amount?: string
+}
+
+export interface ResellerProductSettingProductData {
+    id: number
+    slug: string
+    title: Record<string, string>
+    price_amount: string
+    is_active: boolean
+}
+
+export interface ResellerProductSettingDetailData {
+    product: ResellerProductSettingProductData
+    product_setting?: ResellerProductSettingData
+    skus: ResellerProductSettingSKUData[]
+}
+
+export interface ResellerProductSettingPayloadItem {
+    sku_id: number
+    is_listed: boolean
+    pricing_mode: ResellerPricingMode | string
+    markup_percent: string
+    fixed_markup_amount: string
+    fixed_price_amount: string
+    sort_order: number
+}
+
+export interface ResellerProductSettingUpdatePayload {
+    settings: ResellerProductSettingPayloadItem[]
+}
+
 export interface ResellerBalanceData {
     id: number
     currency: string

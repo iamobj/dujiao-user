@@ -136,6 +136,8 @@
 
     <ResellerSiteConfigPanel v-if="managementState.canSubmitDomain" />
 
+    <ResellerProductSettingsPanel v-if="management?.opened && management?.profile?.status === RESELLER_PROFILE_STATUS_ACTIVE" />
+
     <div class="theme-personal-card">
       <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
@@ -463,6 +465,7 @@ import {
 } from '../../constants/reseller'
 import { pageAlertClass, type PageAlert } from '../../utils/alerts'
 import ResellerSiteConfigPanel from '../../components/reseller/ResellerSiteConfigPanel.vue'
+import ResellerProductSettingsPanel from './ResellerProductSettingsPanel.vue'
 import {
   getResellerFinanceStatusView,
   getResellerLedgerTypeKey,

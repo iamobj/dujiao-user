@@ -21,6 +21,11 @@ export const RESELLER_DOMAIN_VERIFICATION_PENDING = 'pending'
 export const RESELLER_DOMAIN_VERIFICATION_VERIFIED = 'verified'
 export const RESELLER_DOMAIN_VERIFICATION_FAILED = 'failed'
 
+export const RESELLER_PRICING_MODE_INHERIT = 'inherit'
+export const RESELLER_PRICING_MODE_MARKUP_PERCENT = 'markup_percent'
+export const RESELLER_PRICING_MODE_FIXED_MARKUP = 'fixed_markup'
+export const RESELLER_PRICING_MODE_FIXED_PRICE = 'fixed_price'
+
 export const RESELLER_LEDGER_STATUS_PENDING_CONFIRM = 'pending_confirm'
 export const RESELLER_LEDGER_STATUS_AVAILABLE = 'available'
 export const RESELLER_LEDGER_STATUS_LOCKED = 'locked'
