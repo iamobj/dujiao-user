@@ -28,12 +28,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { FileText, Loader2 } from 'lucide-vue-next'
-import { useAppStore } from '../stores/app'
-import { usePageSeo } from '../composables/usePageSeo'
 import { Card } from '@/components/ui/card'
+import { useLegal } from '../composables/useLegal'
 
 const { t } = useI18n()
 
@@ -41,34 +39,7 @@ const props = defineProps<{
   type: 'terms' | 'privacy'
 }>()
 
-usePageSeo({
-  title: () => props.type === 'terms' ? t('footer.terms') : t('footer.privacy'),
-  canonicalPath: () => props.type === 'terms' ? '/terms' : '/privacy',
-})
-
-const appStore = useAppStore()
-
-const loading = computed(() => appStore.loading)
-const locale = computed(() => appStore.locale)
-
-const title = computed(() => {
-  return props.type === 'terms' ? t('footer.terms') : t('footer.privacy')
-})
-
-const content = computed(() => {
-  const config = appStore.config
-  if (!config?.legal) return ''
-
-  const legal = config.legal
-  const lang = locale.value
-
-  if (props.type === 'terms' && legal.terms) {
-    return legal.terms[lang] || ''
-  } else if (props.type === 'privacy' && legal.privacy) {
-    return legal.privacy[lang] || ''
-  }
-  return ''
-})
+const { loading, title, content } = useLegal(() => props.type)
 </script>
 
 <style scoped>

@@ -9,19 +9,19 @@
       </div>
       <div v-if="hasDiscountAmount(order.discount_amount)" class="flex items-center justify-between gap-4">
         <span class="text-muted-foreground">{{ t('orderDetail.amountDiscount') }}</span>
-        <span class="font-medium text-rose-600 dark:text-rose-300">{{ formatDiscountMoney(order.discount_amount, order.currency) }}</span>
+        <span class="font-medium text-destructive">{{ formatDiscountMoney(order.discount_amount, order.currency) }}</span>
       </div>
       <div v-if="hasDiscountAmount(order.promotion_discount_amount)" class="flex items-center justify-between gap-4">
         <span class="text-muted-foreground">{{ t('orderDetail.promotionDiscountLabel') }}</span>
-        <span class="font-medium text-rose-600 dark:text-rose-300">{{ formatDiscountMoney(order.promotion_discount_amount, order.currency) }}</span>
+        <span class="font-medium text-destructive">{{ formatDiscountMoney(order.promotion_discount_amount, order.currency) }}</span>
       </div>
       <div v-if="hasDiscountAmount(order.wholesale_discount_amount)" class="flex items-center justify-between gap-4">
         <span class="text-muted-foreground">{{ t('orderDetail.amountWholesaleDiscount') }}</span>
-        <span class="font-medium text-emerald-600 dark:text-emerald-300">{{ formatDiscountMoney(order.wholesale_discount_amount, order.currency) }}</span>
+        <span class="font-medium text-success">{{ formatDiscountMoney(order.wholesale_discount_amount, order.currency) }}</span>
       </div>
       <div v-if="hasDiscountAmount(order.member_discount_amount)" class="flex items-center justify-between gap-4">
         <span class="text-muted-foreground">{{ t('orderDetail.amountMemberDiscount') }}</span>
-        <span class="font-medium text-amber-600 dark:text-amber-300">{{ formatDiscountMoney(order.member_discount_amount, order.currency) }}</span>
+        <span class="font-medium text-warning">{{ formatDiscountMoney(order.member_discount_amount, order.currency) }}</span>
       </div>
       <div class="flex items-center justify-between gap-4">
         <span class="text-muted-foreground">{{ t('payment.feeRateLabel') }}</span>

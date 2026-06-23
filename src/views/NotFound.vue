@@ -61,29 +61,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { ArrowLeft, Bell, BookOpen, Frown, Home, Info, ShoppingBag } from 'lucide-vue-next'
-import { useAppStore } from '../stores/app'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { useNotFound } from '../composables/useNotFound'
 
-const router = useRouter()
 const { t } = useI18n()
-const appStore = useAppStore()
 
-const brandSiteName = computed(() => {
-  const siteName = String(appStore.config?.brand?.site_name || '').trim()
-  return siteName !== '' ? siteName : 'Dujiao-Next'
-})
-
-const goBack = () => {
-  if (window.history.length > 1) {
-    router.back()
-    return
-  }
-  router.push('/')
-}
+const { brandSiteName, goBack } = useNotFound()
 </script>

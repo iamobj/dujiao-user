@@ -76,91 +76,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Bell, ChevronRight } from 'lucide-vue-next'
-import { useAppStore } from '../stores/app'
-import { postAPI } from '../api'
 import { getImageUrl } from '../utils/image'
-import { debounceAsync } from '../utils/debounce'
-import { usePageSeo } from '../composables/usePageSeo'
 import { Badge } from '@/components/ui/badge'
 import EmptyState from '../components/EmptyState.vue'
 import PaginationNav from '../components/PaginationNav.vue'
+import { usePostList } from '../composables/usePostList'
 
-const router = useRouter()
 const { t } = useI18n()
-const appStore = useAppStore()
 
-usePageSeo({
-  title: () => t('nav.notice'),
-  canonicalPath: () => '/notice',
-})
-
-const loading = ref(true)
-const notices = ref<any[]>([])
-const currentPage = ref(1)
-const pageSize = ref(12)
-const total = ref(0)
-const totalPages = ref(0)
-
-const getLocalizedText = (jsonData: any) => {
-  if (!jsonData) return ''
-  const locale = appStore.locale
-  return jsonData[locale] || jsonData['zh-CN'] || jsonData['en-US'] || ''
-}
-
-const formatDate = (dateString: string) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString(appStore.locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-const loadNotices = async () => {
-  loading.value = true
-  try {
-    const response = await postAPI.list({
-      type: 'notice',
-      page: currentPage.value,
-      page_size: pageSize.value,
-    })
-    notices.value = response.data.data || []
-    if (response.data.pagination) {
-      total.value = response.data.pagination.total || 0
-      totalPages.value = response.data.pagination.total_page || 0
-    }
-  } catch (error) {
-    console.error('Failed to load notices:', error)
-  } finally {
-    loading.value = false
-  }
-}
-
-const debouncedLoadNotices = debounceAsync(loadNotices, 300)
-
-const goToNotice = (slug: string) => {
-  router.push(`/blog/${slug}`) // 使用同一个详情页
-}
-
-const changePage = (page: number) => {
-  if (page < 1 || page > totalPages.value) return
-  currentPage.value = page
-  debouncedLoadNotices()
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-onMounted(() => {
-  loadNotices()
-})
-
-onUnmounted(() => {
-  debouncedLoadNotices.cancel()
-})
+const {
+  loading, posts: notices, currentPage, totalPages,
+  getLocalizedText, formatDate, goToPost: goToNotice, changePage,
+} = usePostList('notice', { title: () => t('nav.notice'), canonicalPath: '/notice' })
 </script>
 
 <style scoped>

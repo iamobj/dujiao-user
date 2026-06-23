@@ -31,7 +31,7 @@
           <!-- Pending review -->
           <div v-else-if="credential.status === 'pending_review'" class="rounded-xl border border-dashed p-5">
             <div class="flex items-start gap-3">
-              <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400">
+              <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-warning/15 text-warning">
                 <AlertTriangle class="h-4 w-4" />
               </div>
               <div>
@@ -44,7 +44,7 @@
           <!-- Rejected -->
           <div v-else-if="credential.status === 'rejected'" class="rounded-xl border border-dashed p-5">
             <div class="flex items-start gap-3">
-              <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-red-600 dark:text-red-400">
+              <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-destructive/15 text-destructive">
                 <XCircle class="h-4 w-4" />
               </div>
               <div>
@@ -65,21 +65,21 @@
               <!-- First-time notice: secret never viewed -->
               <div
                 v-if="!hasViewedSecret && !newSecret"
-                class="rounded-2xl border border-sky-200/70 bg-sky-50/60 p-4 shadow-sm dark:border-sky-500/20 dark:bg-sky-500/10"
+                class="rounded-2xl border border-info/25 bg-info/10 p-4 shadow-sm"
               >
                 <div class="flex items-start gap-3">
-                  <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-500 text-white">
+                  <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-info text-white">
                     <Info class="h-4 w-4" />
                   </div>
                   <div class="flex-1">
-                    <h3 class="text-sm font-semibold text-sky-700 dark:text-sky-300">{{ t('personalCenter.apiPanel.approvedNoticeTitle') }}</h3>
-                    <p class="mt-1 text-xs text-sky-700/80 dark:text-sky-200">
+                    <h3 class="text-sm font-semibold text-info">{{ t('personalCenter.apiPanel.approvedNoticeTitle') }}</h3>
+                    <p class="mt-1 text-xs text-info/80">
                       {{ t('personalCenter.apiPanel.approvedNoticeDesc') }}
                     </p>
                     <button
                       type="button"
                       :disabled="submitting"
-                      class="mt-3 inline-flex items-center rounded-xl bg-sky-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
+                      class="mt-3 inline-flex items-center rounded-xl bg-info px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-info/90 disabled:cursor-not-allowed disabled:opacity-60"
                       @click="handleFirstGenerate"
                     >
                       {{ submitting ? t('personalCenter.apiPanel.regenerating') : t('personalCenter.apiPanel.generateSecret') }}
@@ -120,24 +120,24 @@
               <!-- Newly generated secret (shown once) -->
               <div
                 v-if="newSecret"
-                class="rounded-2xl border border-emerald-200/70 bg-emerald-50/60 p-4 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10 new-secret-burst"
+                class="rounded-2xl border border-success/25 bg-success/10 p-4 shadow-sm new-secret-burst"
               >
                 <div class="flex items-start gap-3">
-                  <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
+                  <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-success text-white">
                     <Check class="h-4 w-4" />
                   </div>
                   <div class="flex-1">
-                    <h3 class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">{{ t('personalCenter.apiPanel.newSecretTitle') }}</h3>
-                    <p class="mt-1 text-xs text-emerald-700/80 dark:text-emerald-200">
+                    <h3 class="text-sm font-semibold text-success">{{ t('personalCenter.apiPanel.newSecretTitle') }}</h3>
+                    <p class="mt-1 text-xs text-success/80">
                       {{ t('personalCenter.apiPanel.newSecretWarning') }}
                     </p>
                     <div class="mt-3 flex flex-wrap items-center gap-2">
-                      <span class="rounded-lg border border-emerald-300/60 bg-white/60 px-2.5 py-1 font-mono text-sm text-emerald-800 break-all dark:border-emerald-500/30 dark:bg-emerald-900/30 dark:text-emerald-100">
+                      <span class="rounded-lg border border-success/30 bg-card px-2.5 py-1 font-mono text-sm text-foreground break-all">
                         {{ newSecret }}
                       </span>
                       <button
                         type="button"
-                        class="inline-flex items-center rounded-lg border border-emerald-300/60 bg-emerald-100/60 px-2.5 py-1 text-xs font-semibold text-emerald-700 transition-colors hover:bg-emerald-200/60 dark:border-emerald-500/30 dark:bg-emerald-800/30 dark:text-emerald-200"
+                        class="inline-flex items-center rounded-lg border border-success/30 bg-success/10 px-2.5 py-1 text-xs font-semibold text-success transition-colors hover:bg-success/20"
                         @click="copyToClipboard(newSecret)"
                       >
                         {{ t('personalCenter.apiPanel.copySecret') }}
@@ -160,7 +160,7 @@
                     type="button"
                     :disabled="submitting"
                     class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
-                    :class="credential.is_active ? 'bg-emerald-500' : 'bg-muted-foreground/30'"
+                    :class="credential.is_active ? 'bg-success' : 'bg-muted-foreground/30'"
                     role="switch"
                     :aria-checked="credential.is_active"
                     @click="handleToggleStatus"

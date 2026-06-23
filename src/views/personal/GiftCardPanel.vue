@@ -15,15 +15,15 @@
 
           <div
             v-if="lastRedeem"
-            class="mb-6 rounded-2xl border border-emerald-200/70 bg-emerald-50/60 p-4 shadow-sm success-burst dark:border-emerald-500/20 dark:bg-emerald-500/10"
+            class="mb-6 rounded-2xl border border-success/25 bg-success/10 p-4 shadow-sm success-burst"
           >
             <div class="flex items-start gap-3">
-              <div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-white">
+              <div class="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-success text-white">
                 <Check class="h-4 w-4" />
               </div>
               <div class="flex-1 space-y-2">
-                <h3 class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">{{ t('personalCenter.giftCard.successTitle') }}</h3>
-                <div class="grid grid-cols-1 gap-2 text-xs text-emerald-700/90 dark:text-emerald-200 md:grid-cols-3">
+                <h3 class="text-sm font-semibold text-success">{{ t('personalCenter.giftCard.successTitle') }}</h3>
+                <div class="grid grid-cols-1 gap-2 text-xs text-success/90 md:grid-cols-3">
                   <div>
                     <div class="opacity-75">{{ t('personalCenter.giftCard.successCode') }}</div>
                     <div class="mt-0.5 font-mono">{{ String(lastRedeem.gift_card?.code || '-').toUpperCase() }}</div>

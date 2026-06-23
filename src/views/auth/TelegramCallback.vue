@@ -9,53 +9,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useUserAuthStore } from '../../stores/userAuth'
-import { userProfileAPI } from '../../api'
+import { useTelegramCallback } from '../../composables/useTelegramCallback'
 
 const { t } = useI18n()
-const route = useRoute()
-const router = useRouter()
-const userAuthStore = useUserAuthStore()
-const loading = ref(true)
-const errMsg = ref('')
 
-onMounted(async () => {
-  const code = String(route.query.code || '')
-  const state = String(route.query.state || '')
-  const oauthErr = String(route.query.error || '')
-  const intent = sessionStorage.getItem('tg_oidc_intent') || 'login'
-  const savedRedirect = sessionStorage.getItem('tg_oidc_redirect') || ''
-  sessionStorage.removeItem('tg_oidc_intent')
-  sessionStorage.removeItem('tg_oidc_redirect')
-
-  if (oauthErr || !code || !state) {
-    errMsg.value = t('auth.telegramCallback.failed')
-    loading.value = false
-    return
-  }
-
-  try {
-    if (intent === 'bind') {
-      await userProfileAPI.telegramOidcBindCallback({ code, state })
-      await router.replace({ path: '/me/security', query: { tgBound: '1' } })
-      return
-    }
-    const result = await userAuthStore.telegramOidcLogin({ code, state })
-    if (result?.requiresTotp) {
-      const query: Record<string, string> = { tg2fa: '1' }
-      if (savedRedirect) {
-        query.redirect = savedRedirect
-      }
-      await router.replace({ path: '/auth/login', query })
-      return
-    }
-    await router.replace(savedRedirect || '/me/orders')
-  } catch (err: any) {
-    errMsg.value = err?.message || t('auth.telegramCallback.failed')
-    loading.value = false
-  }
-})
+const { loading, errMsg } = useTelegramCallback()
 </script>
