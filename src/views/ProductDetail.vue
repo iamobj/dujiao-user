@@ -189,12 +189,12 @@
                 </div>
 
                 <!-- 批发价规则展示 -->
-                <div v-if="hasWholesalePrices(product)" class="mb-8 rounded-xl border border-emerald-200 bg-emerald-50/50 px-4 py-3 dark:border-emerald-800/50 dark:bg-emerald-950/20">
+                <div v-if="selectedSkuWholesaleRules.length" class="mb-8 rounded-xl border border-emerald-200 bg-emerald-50/50 px-4 py-3 dark:border-emerald-800/50 dark:bg-emerald-950/20">
                   <h2 class="mb-2 flex items-center gap-1.5 text-sm font-bold text-emerald-700 dark:text-emerald-300">
                     {{ t('products.wholesaleRulesTitle') }}
                   </h2>
                   <div class="flex flex-wrap gap-2">
-                    <Badge v-for="tier in getWholesalePrices(product)" :key="tier.min_quantity" variant="success" class="rounded-full px-3 py-1 font-medium">
+                    <Badge v-for="tier in selectedSkuWholesaleRules" :key="`${tier.sku_id || tier.sku_code || 'all'}-${tier.min_quantity}`" variant="success" class="rounded-full px-3 py-1 font-medium">
                       {{ formatWholesaleTier(tier) }}
                     </Badge>
                   </div>
@@ -453,12 +453,13 @@ const {
   getPurchaseTypeLabel, getFulfillmentTypeLabel, getStockBadgeVariant, getStockStatusLabel,
   hasPromotionPrice, getPromotionPriceAmount, getPromotionSaveAmount,
   hasSkuPromotionPrice, getSkuPromotionSaveAmount,
-  hasPromotionRules, getPromotionRules, hasWholesalePrices, getWholesalePrices,
+  hasPromotionRules, getPromotionRules,
   formatPromotionRule, formatWholesaleTier, formatRelatedPostDate, normalizeSkuId,
   loading, product, relatedPosts, currentImage, selectedSkuId, quantity, purchaseWarning,
   activeSkus, selectedSku,
   selectedSkuMemberPrice, hasMemberPrice,
   hasSelectedSkuWholesalePrice, selectedSkuWholesaleFinalIsMember, selectedSkuWholesaleFinalPrice,
+  selectedSkuWholesaleRules,
   selectedSkuPromotionPrice, selectedSkuPromotionFinalIsMember, selectedSkuPromotionFinalPrice,
   showSelectedSkuMemberBadge,
   isSkuPurchasable, skuDisplayText, skuStockText, skuStockBadgeClass,
