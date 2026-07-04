@@ -144,7 +144,7 @@
               </div>
             </div>
 
-            <!-- 协议 -->
+            <!-- 协议
             <label class="flex items-start gap-3 rounded-2xl border bg-muted px-4 py-3 text-sm leading-6 text-muted-foreground">
               <input v-model="agreed" type="checkbox" class="mt-0.5 h-4 w-4 shrink-0 accent-[var(--ui-accent)]" />
               <span>
@@ -154,12 +154,13 @@
                 <RouterLink to="/terms" target="_blank" rel="noopener noreferrer" class="font-semibold text-primary hover:underline">{{ t('footer.terms') }}</RouterLink>
               </span>
             </label>
+            -->
 
             <Alert v-if="error" variant="destructive" class="text-center">
               <AlertDescription>{{ error }}</AlertDescription>
             </Alert>
 
-            <Button type="submit" :disabled="userAuthStore.loading || !agreed" class="h-11 w-full rounded-full font-bold">
+            <Button type="submit" :disabled="userAuthStore.loading" class="h-11 w-full rounded-full font-bold">
               <UserPlus v-if="!userAuthStore.loading" class="h-4 w-4" />
               {{ userAuthStore.loading ? t('auth.register.creating') : t('auth.register.create') }}
             </Button>
@@ -191,7 +192,7 @@ const { t } = useI18n()
 
 const {
   userAuthStore, brandSiteName,
-  email, emailLocalPart, selectedEmailDomain, password, showPassword, code, agreed,
+  email, emailLocalPart, selectedEmailDomain, password, showPassword, code,
   passwordStrength, error, sending, countdown,
   captchaPayload, turnstileToken, imageCaptchaRef, turnstileRef,
   captchaProvider, sendCodeCaptchaEnabled, turnstileSiteKey,

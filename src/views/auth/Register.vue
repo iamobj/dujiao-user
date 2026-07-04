@@ -163,7 +163,7 @@
             </div>
           </div>
 
-          <label class="flex items-start gap-3 rounded-xl border bg-secondary px-4 py-3 text-sm text-muted-foreground transition-colors">
+          <!-- <label class="flex items-start gap-3 rounded-xl border bg-secondary px-4 py-3 text-sm text-muted-foreground transition-colors">
             <input
               v-model="agreed"
               type="checkbox"
@@ -179,7 +179,7 @@
                 {{ t('footer.terms') }}
               </router-link>
             </span>
-          </label>
+          </label> -->
 
           <Alert v-if="error" variant="destructive" class="text-center">
             <AlertDescription>{{ error }}</AlertDescription>
@@ -187,7 +187,7 @@
 
           <Button
             type="submit"
-            :disabled="userAuthStore.loading || !agreed"
+            :disabled="userAuthStore.loading"
             class="h-11 w-full font-bold"
           >
             <UserPlus v-if="!userAuthStore.loading" class="h-4 w-4" />
@@ -226,7 +226,7 @@ const { t } = useI18n()
 
 const {
   userAuthStore, brandSiteName,
-  email, emailLocalPart, selectedEmailDomain, password, showPassword, code, agreed,
+  email, emailLocalPart, selectedEmailDomain, password, showPassword, code,
   passwordStrength, error, sending, countdown,
   captchaPayload, turnstileToken, imageCaptchaRef, turnstileRef,
   captchaProvider, sendCodeCaptchaEnabled, turnstileSiteKey,
